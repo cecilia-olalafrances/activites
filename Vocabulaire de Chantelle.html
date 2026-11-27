@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vocabulaire de Chantelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: warm, encouraging, playful — a holiday workbook for an A1 adult learner
+   IDEA: a recipe-card box — each activity is a card pulled from a tin
+   PICTURE: the working card itself, large, at the top of each activity
+   COLOUR and TYPE: ocean blue ground, sunny yellow, coral accent; Fredoka titles + Nunito body
+   LAYOUT: title band, tab row of 5 activities, one big card area, theme chips */
+:root{color-scheme:light dark;
+--bg:light-dark(#f4f8fb,#0e1a24);--ink:light-dark(#13222e,#e9f1f6);--mute:light-dark(#5a6b78,#9fb2c0);
+--card:light-dark(#ffffff,#16293a);--line:light-dark(#d6e2ea,#24405a);
+--blue:#0b5e8a;--sun:#ffc93c;--coral:#ff6b57;--ok:#1f9d6b;--bad:#d9433a}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 Nunito,system-ui,sans-serif;overflow-x:clip}
+h1,h2,.big{font-family:Fredoka,Nunito,sans-serif}
+header{background:var(--blue);color:#fff;padding:clamp(22px,4vw,44px) max(5vw,16px) 26px;position:relative;overflow:hidden}
+header h1{margin:0;font-size:clamp(30px,6vw,46px);line-height:1.05;text-wrap:balance}
+header p{margin:8px 0 0;max-width:60ch;color:#d9ecf7}
+header svg{position:absolute;right:-30px;top:-30px;width:200px;height:200px;opacity:.9}
+.wrap{max-width:900px;margin:0 auto;padding:18px max(4vw,14px) 60px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:-38px 0 18px;position:relative}
+.tabs button{flex:1 1 140px;min-height:48px;border:0;border-radius:14px;background:var(--card);color:var(--ink);font:600 16px Fredoka,sans-serif;cursor:pointer;box-shadow:0 2px 0 var(--line)}
+.tabs button[aria-selected=true]{background:var(--sun);color:#13222e;box-shadow:0 3px 0 #d9a21b}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+.chips button{min-height:38px;padding:0 14px;border-radius:99px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:600 14px Nunito,sans-serif;cursor:pointer}
+.chips button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.panel{background:var(--card);border-radius:22px;padding:clamp(18px,4vw,34px);box-shadow:0 4px 0 var(--line)}
+.panel h2{margin:0 0 4px;font-size:26px}
+.hint{color:var(--mute);margin:0 0 18px;font-size:15px}
+.flash{min-height:230px;border-radius:18px;border:2px dashed var(--line);display:grid;place-items:center;text-align:center;padding:20px;cursor:pointer;user-select:none;transition:transform .25s}
+.flash.flip{background:light-dark(#fff7dc,#2a2a18);border-style:solid;border-color:var(--sun)}
+.big{font-size:clamp(28px,6vw,42px);line-height:1.1;font-weight:600}
+.sub{color:var(--mute);font-size:15px;margin-top:8px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+.btn{min-height:46px;padding:0 18px;border-radius:12px;border:0;font:600 16px Nunito,sans-serif;cursor:pointer;background:var(--blue);color:#fff}
+.btn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.ok{background:var(--ok)}.btn.bad{background:var(--coral)}
+.btn:focus-visible,.tabs button:focus-visible,.chips button:focus-visible,.opt:focus-visible,.tile:focus-visible,input:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.opt{min-height:58px;border-radius:14px;border:2px solid var(--line);background:transparent;color:var(--ink);font:600 17px Nunito,sans-serif;cursor:pointer;padding:8px}
+.opt.good{background:var(--ok);border-color:var(--ok);color:#fff}.opt.wrong{background:var(--bad);border-color:var(--bad);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.tile{min-height:72px;border-radius:14px;border:2px solid var(--line);background:transparent;color:var(--ink);font:600 16px Nunito,sans-serif;cursor:pointer;padding:6px}
+.tile.fr{background:light-dark(#eaf4fb,#15324a)}
+.tile.sel{border-color:var(--sun);background:var(--sun);color:#13222e}
+.tile.done{visibility:hidden}.tile.no{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+input[type=text]{width:100%;min-height:52px;font:600 20px Nunito,sans-serif;padding:0 14px;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--ink);margin-top:16px}
+.fb{min-height:28px;margin-top:12px;font-weight:700}
+.fb.g{color:var(--ok)}.fb.b{color:var(--bad)}
+.score{font:600 15px Nunito,sans-serif;color:var(--mute)}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--sun);width:0;transition:width .3s}
+.end{text-align:center;padding:20px 0}
+footer{color:var(--mute);font-size:14px;text-align:center;margin-top:24px}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.opts{grid-template-columns:minmax(0,1fr)}header svg{width:130px;height:130px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+<svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="110" cy="90" r="58" fill="#ffc93c"/><g stroke="#ffc93c" stroke-width="8" stroke-linecap="round"><path d="M110 8v14M110 158v14M28 90h14M178 90h14M52 32l10 10M158 138l10 10M52 148l10-10M158 42l10-10"/></g><circle cx="94" cy="82" r="5" fill="#13222e"/><circle cx="126" cy="82" r="5" fill="#13222e"/><path d="M92 104q18 16 36 0" stroke="#13222e" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
+<h1>Bonnes vacances, Chantelle&nbsp;!</h1>
+<p>Révise ton vocabulaire 10 minutes par jour. <i>Practise your vocabulary 10 minutes a day.</i></p>
+</header>
+
+<div class="wrap">
+<nav class="tabs" role="tablist" id="tabs"></nav>
+<div class="chips" id="chips" aria-label="Thèmes"></div>
+<main class="panel" id="panel"></main>
+<footer>Choisis un thème, puis une activité. <i>Pick a theme, then an activity.</i></footer>
+</div>
+
+<script>
+{
+const RAW={
+"Nourriture":`un agrume|a citrus fruit
+un repas|a meal
+la mie de pain|the soft inside of bread
+la croûte|the crust
+le goût|the taste
+le pain de mie|sliced bread
+une cacahuète|a peanut
+un ananas|a pineapple
+le bœuf|beef
+la viande|meat
+une épice|a spice
+les herbes|herbs|f
+le poireau|a leek
+la nourriture|food
+le chocolat|chocolate
+la confiture|jam
+un biscuit|a biscuit
+l'ail|garlic|m
+une gousse d'ail|a clove of garlic
+l'avocat|the avocado|m
+un noyau|a stone (in a fruit)
+un pépin|a pip, a seed
+la peau|the skin
+un poisson|a fish
+le vin|wine
+un yaourt|a yogurt
+l'eau|water|f
+une fraise|a strawberry
+une framboise|a raspberry
+une myrtille|a blueberry
+une cerise|a cherry
+une bouteille d'eau|a bottle of water`,
+"Cuisine":`la cuisine|the kitchen, cooking
+la cuisson|cooking (with heat)
+la bouilloire|the kettle
+un saladier|a salad bowl
+un couteau|a knife
+une cuillère|a spoon
+une fourchette|a fork
+une assiette|a plate
+une casserole|a saucepan
+une cocotte-minute|a pressure cooker
+un moule|a cake tin, a mould
+une moule|a mussel
+une poêle|a frying pan
+une tasse|a cup, a mug
+un verre|a glass`,
+"Corps et santé":`une grossesse|a pregnancy
+une douleur|a pain
+un kiné|a physio
+la naissance|the birth
+la fatigue|tiredness
+un torticolis|a stiff neck
+un coussin|a cushion
+la nuque|the back of the neck
+le cou|the neck
+le dos|the back
+la tête|the head
+les doigts|the fingers|m
+les doigts de pied|the toes|m
+un pied|a foot
+une épaule|a shoulder
+le genou|the knee
+les cheveux|hair (on the head)|m
+un poil|a body hair
+un vaccin|a vaccine
+avoir mal à|to have a pain in
+j'ai mal|it hurts, I'm in pain`,
+"Saisons et météo":`le vent|the wind
+le printemps|spring
+l'été|summer|m
+l'automne|autumn|m
+l'hiver|winter|m
+une saison|a season
+la clim|the air conditioning
+le chauffage|the heating
+la neige|the snow
+la montagne|the mountain
+une forêt|a forest
+une feuille|a leaf
+le soleil|the sun
+un ventilateur|a fan`,
+"Noël":`le Père Noël|Santa Claus
+un renne|a reindeer
+les bois|antlers|m
+les lutins|Santa's elves|m
+une vitrine|a shop window
+une décoration|a decoration
+un calendrier de l'avent|an advent calendar
+un vol|a flight
+un cookie|a cookie`,
+"Le temps":`l'après-midi|the afternoon|m
+le midi|noon
+minuit|midnight|m
+la nuit|the night
+le mois|the month
+une journée|a day (what you do in it)
+un jour|a day (24 hours, a date)
+un anniversaire|a birthday
+un rendez-vous|an appointment
+un jour férié|a public holiday
+hier|yesterday
+aujourd'hui|today
+demain|tomorrow
+plus tard|later
+tôt|early
+tard|late
+la nuit dernière|last night
+et quart|quarter past
+et demie|half past
+moins le quart|quarter to
+une fois par semaine|once a week`,
+"Maison, ville, animaux":`le salon|the living room
+un canapé|a sofa
+un livre|a book
+un mot|a word
+un dessin|a drawing
+une roue|a wheel
+une bague|a ring
+un magasin|a shop
+un magazine|a magazine
+une livraison|a delivery
+un portail|a gate (of a house)
+une porte|a door
+un timbre|a stamp
+une bijouterie|a jewellery shop
+un piéton|a pedestrian
+un chat|a cat
+une souris|a mouse
+un phoque|a seal
+un lion|a lion
+un lionceau|a lion cub
+un roi|a king
+le cheval|the horse
+un étudiant|a university student`,
+"Verbes":`marcher|to walk
+avoir|to have
+être|to be
+faire|to do, to make
+aimer|to like, to love
+vouloir|to want
+aller|to go
+essayer|to try
+nettoyer|to clean
+laver|to wash
+cuisiner|to cook
+regarder|to watch
+nourrir|to feed
+donner|to give
+commander|to order (food)
+prendre|to take
+pleurer|to cry
+voler|to fly
+décorer|to decorate
+éplucher|to peel
+rôtir|to roast
+couper|to cut
+trancher|to slice
+cuire|to cook (with heat)
+rire|to laugh
+savoir|to know
+apprendre|to learn
+acheter|to buy
+appeler|to call
+mûrir|to ripen`,
+"Adjectifs et petits mots":`dernier|last
+mondial|worldwide
+stressant|stressful
+malade|sick, ill
+heureux|happy
+surgelé|frozen
+agité|restless
+bouclé|curly
+ondulé|wavy
+sain|healthy
+cru|raw
+rigolo|funny
+grec|Greek
+roux|red-haired
+gazeux|sparkling
+prêt|ready
+allemand|German
+enceinte|pregnant
+beaucoup de|a lot of
+parce que|because
+mais|but
+alors|so, then
+dedans|inside
+dehors|outside
+après|after
+ensuite|then, next
+sans|without
+quand|when
+comme|like, as
+à l'intérieur|indoors
+à l'extérieur|outdoors
+quoi d'autre ?|what else?
+je ne sais pas|I don't know`};
+
+const WORDS=[];
+for(const [t,txt] of Object.entries(RAW)){
+  for(const line of txt.split('\n')){
+    const [fr,en,g0]=line.split('|');
+    let g=g0||null;
+    if(!g){if(/^(un|le) /.test(fr))g='m';else if(/^(une|la) /.test(fr))g='f';}
+    WORDS.push({fr,en,t,g});
+  }
+}
+const THEMES=['Tout',...Object.keys(RAW)];
+const TABS=[['cartes','Cartes'],['quiz','Quiz'],['paires','Paires'],['ecrire','Écrire'],['genre','Un ou une ?']];
+let theme='Tout',tab='cartes';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pool=()=>theme==='Tout'?WORDS:WORDS.filter(w=>w.t===theme);
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let known=new Set(store.get('chantelle-known',[]));
+const canSpeak='speechSynthesis' in window;
+function say(text){if(!canSpeak)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace('?',''));u.lang='fr-FR';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+const speakBtn=fr=>canSpeak?`<button class="btn alt" data-say="${esc(fr)}">Écouter</button>`:'';
+const bare=fr=>fr.replace(/^(un|une|le|la|les) /,'').replace(/^l'/,'');
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/œ/g,'oe').replace(/[’]/g,"'").replace(/^(un|une|le|la|les|des) /,'').replace(/^l'/,'').replace(/[?!.]/g,'').trim();
+const strict=s=>s.toLowerCase().replace(/[’]/g,"'").replace(/^(un|une|le|la|les|des) /,'').replace(/^l'/,'').replace(/[?!.]/g,'').trim();
+
+function renderNav(){
+  $('#tabs').innerHTML=TABS.map(([id,l])=>`<button role="tab" data-tab="${id}" aria-selected="${id===tab}">${l}</button>`).join('');
+  $('#chips').innerHTML=THEMES.map(t=>`<button data-theme-pick="${esc(t)}" class="${t===theme?'on':''}">${esc(t)}</button>`).join('');
+}
+function render(){renderNav();({cartes,quiz,paires,ecrire,genre})[tab]();}
+
+/* 1. Cartes */
+let cIdx=0,cDeck=[],cFlip=false,cDir='fr';
+function cartes(){
+  if(!cDeck.length){cDeck=shuffle(pool());cIdx=0}
+  const w=cDeck[cIdx],front=cDir==='fr'?w.fr:w.en,back=cDir==='fr'?w.en:w.fr;
+  const k=pool().filter(x=>known.has(x.fr)).length;
+  $('#panel').innerHTML=`<h2>Cartes</h2><p class="hint">Touche la carte pour voir la traduction. <i>Tap the card to flip it.</i></p>
+  <div class="score">Je sais : ${k} / ${pool().length} mots</div><div class="bar"><i style="width:${k/pool().length*100}%"></i></div>
+  <div class="flash ${cFlip?'flip':''}" id="flash" tabindex="0" role="button" aria-label="Retourner la carte" style="margin-top:16px">
+   <div><div class="big">${esc(cFlip?back:front)}</div><div class="sub">${esc(w.t)} · ${cIdx+1} / ${cDeck.length}</div></div></div>
+  <div class="row">${cFlip?`<button class="btn bad" id="again">À revoir</button><button class="btn ok" id="know">Je sais !</button>`:`<button class="btn" id="flipb">Retourner</button>`}
+  ${speakBtn(w.fr)}<button class="btn alt" id="dir">${cDir==='fr'?'Français → anglais':'Anglais → français'}</button></div>`;
+  const flip=()=>{cFlip=!cFlip;cartes()};
+  $('#flash').onclick=flip;$('#flash').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}};
+  if($('#flipb'))$('#flipb').onclick=flip;
+  const next=()=>{cFlip=false;cIdx=(cIdx+1)%cDeck.length;if(cIdx===0)cDeck=shuffle(pool());cartes()};
+  if($('#know'))$('#know').onclick=()=>{known.add(w.fr);store.set('chantelle-known',[...known]);next()};
+  if($('#again'))$('#again').onclick=()=>{known.delete(w.fr);store.set('chantelle-known',[...known]);next()};
+  $('#dir').onclick=()=>{cDir=cDir==='fr'?'en':'fr';cFlip=false;cartes()};
+}
+
+/* 2. Quiz */
+let q=null;
+function newQuiz(){const p=pool();q={items:shuffle(p).slice(0,Math.min(10,p.length)),i:0,score:0,answered:false}}
+function quiz(){
+  if(!q)newQuiz();
+  if(q.i>=q.items.length){
+    $('#panel').innerHTML=`<h2>Quiz</h2><div class="end"><div class="big">${q.score} / ${q.items.length}</div><p>${q.score>=q.items.length*.8?'Excellent, bravo !':q.score>=q.items.length*.5?'Bien ! Continue.':'Courage, on recommence !'}</p><button class="btn" id="re">Nouveau quiz</button></div>`;
+    $('#re').onclick=()=>{newQuiz();quiz()};return;
+  }
+  const w=q.items[q.i],toEn=q.i%2===0;
+  const same=pool().length>=4?pool():WORDS;
+  const others=shuffle(same.filter(x=>x!==w)).slice(0,3);
+  const opts=q.opts||(q.opts=shuffle([w,...others]));
+  $('#panel').innerHTML=`<h2>Quiz</h2><p class="hint">${toEn?'Quelle est la traduction ? <i>Pick the English meaning.</i>':'Choisis le mot français. <i>Pick the French word.</i>'}</p>
+  <div class="score">Question ${q.i+1} / ${q.items.length} · Score : ${q.score}</div><div class="bar"><i style="width:${q.i/q.items.length*100}%"></i></div>
+  <div class="flash" style="margin-top:16px;cursor:default;min-height:150px"><div class="big">${esc(toEn?w.fr:w.en)}</div></div>
+  <div class="opts">${opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(toEn?o.en:o.fr)}</button>`).join('')}</div>
+  <div class="row" id="qnext"></div>`;
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(q.answered)return;q.answered=true;
+    const o=opts[+b.dataset.o];
+    if(o===w){b.classList.add('good');q.score++}else{b.classList.add('wrong');document.querySelectorAll('.opt')[opts.indexOf(w)].classList.add('good')}
+    say(w.fr);
+    $('#qnext').innerHTML=`<button class="btn" id="nx">Suivant</button>`;
+    $('#nx').onclick=()=>{q.i++;q.answered=false;q.opts=null;quiz()};$('#nx').focus();
+  });
+}
+
+/* 3. Paires */
+let pr=null;
+function newPairs(){const p=shuffle(pool()).slice(0,6);pr={words:p,tiles:shuffle([...p.map((w,i)=>({i,s:w.fr,fr:1})),...p.map((w,i)=>({i,s:w.en,fr:0}))]),sel:null,done:new Set(),tries:0}}
+function paires(){
+  if(!pr)newPairs();
+  const fin=pr.done.size===pr.words.length;
+  $('#panel').innerHTML=`<h2>Paires</h2><p class="hint">Associe le mot français et sa traduction. <i>Match each French word with its English meaning.</i></p>
+  <div class="score">Paires trouvées : ${pr.done.size} / ${pr.words.length} · Essais : ${pr.tries}</div>
+  ${fin?`<div class="end"><div class="big">Bravo !</div><p>Toutes les paires en ${pr.tries} essais.</p><button class="btn" id="re">Nouvelle partie</button></div>`:
+  `<div class="grid">${pr.tiles.map((t,k)=>`<button class="tile ${t.fr?'fr':''} ${pr.done.has(t.i)?'done':''} ${pr.sel===k?'sel':''}" data-k="${k}">${esc(t.s)}</button>`).join('')}</div>`}`;
+  if(fin){$('#re').onclick=()=>{newPairs();paires()};return}
+  document.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{
+    const k=+b.dataset.k,t=pr.tiles[k];
+    if(t.fr)say(t.s);
+    if(pr.sel===null){pr.sel=k;paires();return}
+    const s=pr.tiles[pr.sel];
+    if(pr.sel===k||s.fr===t.fr){pr.sel=k;paires();return}
+    pr.tries++;
+    if(s.i===t.i){pr.done.add(t.i);pr.sel=null;paires()}
+    else{const a=pr.sel;pr.sel=null;paires();[a,k].forEach(x=>{const el=document.querySelector(`[data-k="${x}"]`);el.classList.add('no')})}
+  });
+}
+
+/* 4. Écrire */
+let wr=null;
+function newWrite(){wr={items:shuffle(pool()).slice(0,Math.min(10,pool().length)),i:0,score:0,state:'ask',hint:0}}
+function ecrire(){
+  if(!wr)newWrite();
+  if(wr.i>=wr.items.length){
+    $('#panel').innerHTML=`<h2>Écrire</h2><div class="end"><div class="big">${wr.score} / ${wr.items.length}</div><p>Bravo pour ton travail !</p><button class="btn" id="re">Recommencer</button></div>`;
+    $('#re').onclick=()=>{newWrite();ecrire()};return;
+  }
+  const w=wr.items[wr.i],target=bare(w.fr);
+  $('#panel').innerHTML=`<h2>Écrire</h2><p class="hint">Écris le mot en français (sans l'article). <i>Type the French word, no need for le / la / un / une.</i></p>
+  <div class="score">Mot ${wr.i+1} / ${wr.items.length} · Score : ${wr.score}</div><div class="bar"><i style="width:${wr.i/wr.items.length*100}%"></i></div>
+  <div class="flash" style="margin-top:16px;cursor:default;min-height:140px"><div><div class="big">${esc(w.en)}</div>${wr.hint?`<div class="sub">Indice : ${esc(target.slice(0,wr.hint))}…</div>`:''}</div></div>
+  <form id="f"><input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Ta réponse" ${wr.state!=='ask'?'disabled':''}>
+  <div class="fb" id="fb"></div>
+  <div class="row">${wr.state==='ask'?`<button class="btn" type="submit">Vérifier</button><button class="btn alt" type="button" id="hint">Indice</button>`:`<button class="btn" type="button" id="nx">Suivant</button>${speakBtn(w.fr)}`}</div></form>`;
+  const inp=$('#ans');
+  if(wr.state==='ask'){inp.focus();
+    $('#hint').onclick=()=>{wr.hint=Math.min(wr.hint+1,target.length);ecrire()};
+    $('#f').onsubmit=e=>{e.preventDefault();const a=inp.value;if(!a.trim())return;
+      let msg,cls;
+      if(strict(a)===strict(w.fr)){wr.score++;msg='Parfait ! '+w.fr;cls='g'}
+      else if(norm(a)===norm(w.fr)){wr.score++;msg='Presque ! Attention aux accents : '+w.fr;cls='g'}
+      else{msg='La réponse : '+w.fr;cls='b'}
+      wr.state='done';wr.last=[msg,cls,a];say(w.fr);ecrire();};
+  }else{inp.value=wr.last[2];$('#fb').textContent=wr.last[0];$('#fb').className='fb '+wr.last[1];
+    $('#nx').onclick=()=>{wr.i++;wr.state='ask';wr.hint=0;ecrire()};$('#nx').focus();}
+}
+
+/* 5. Un ou une ? */
+let gn=null;
+function newGenre(){const p=pool().filter(w=>w.g);gn={items:shuffle(p.length?p:WORDS.filter(w=>w.g)).slice(0,10),i:0,score:0,ans:null}}
+function genre(){
+  if(!gn)newGenre();
+  if(gn.i>=gn.items.length){
+    $('#panel').innerHTML=`<h2>Un ou une ?</h2><div class="end"><div class="big">${gn.score} / ${gn.items.length}</div><p>Masculin ou féminin, tu progresses !</p><button class="btn" id="re">Recommencer</button></div>`;
+    $('#re').onclick=()=>{newGenre();genre()};return;
+  }
+  const w=gn.items[gn.i],plural=/^les /.test(w.fr);
+  $('#panel').innerHTML=`<h2>Un ou une ?</h2><p class="hint">Le mot est masculin ou féminin ? <i>Is the word masculine or feminine?</i>${theme!=='Tout'&&!pool().some(x=>x.g)?' <br>Pas de noms dans ce thème : tous les thèmes.':''}</p>
+  <div class="score">Mot ${gn.i+1} / ${gn.items.length} · Score : ${gn.score}</div><div class="bar"><i style="width:${gn.i/gn.items.length*100}%"></i></div>
+  <div class="flash" style="margin-top:16px;cursor:default;min-height:140px"><div><div class="big">${esc(bare(w.fr))}${plural?' (pl.)':''}</div><div class="sub">${esc(w.en)}</div></div></div>
+  <div class="opts"><button class="opt" data-g="m">masculin<br><small>un · le</small></button><button class="opt" data-g="f">féminin<br><small>une · la</small></button></div>
+  <div class="fb" id="fb"></div><div class="row" id="gnext"></div>`;
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(gn.ans)return;gn.ans=b.dataset.g;
+    const ok=gn.ans===w.g;if(ok)gn.score++;
+    b.classList.add(ok?'good':'wrong');if(!ok)document.querySelector(`[data-g="${w.g}"]`).classList.add('good');
+    $('#fb').textContent=(ok?'Oui ! ':'Non : ')+w.fr+(w.g==='m'?' (masculin)':' (féminin)');$('#fb').className='fb '+(ok?'g':'b');
+    say(w.fr);
+    $('#gnext').innerHTML=`<button class="btn" id="nx">Suivant</button>`;
+    $('#nx').onclick=()=>{gn.i++;gn.ans=null;genre()};$('#nx').focus();
+  });
+}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-tab]');if(t){tab=t.dataset.tab;render();return}
+  const c=e.target.closest('[data-theme-pick]');if(c){theme=c.dataset.themePick;cDeck=[];cFlip=false;q=null;pr=null;wr=null;gn=null;render();return}
+  const s=e.target.closest('[data-say]');if(s)say(s.dataset.say);
+});
+render();
+}
+</script>
+</body>
+</html>
